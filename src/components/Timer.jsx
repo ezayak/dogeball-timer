@@ -38,6 +38,7 @@ class Timer extends React.Component {
 
             if (seconds === 0 && minutes === 0) {
                 //stop timer, make alarm
+                window.navigator.vibrate(200);
                 this.stopTimer();
                 return;
             }

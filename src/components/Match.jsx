@@ -79,9 +79,11 @@ class Match extends React.Component {
             setScore2: 0,
             setNumber: setNumber,
             titelSet: 'Set #'+ setNumber,
-            titleMatchHalf: this.matchMinutes === 0 && this.matchSeconds < 20 ? 'Match 2nd half' : 'Match 1st half',
+            titleMatchHalf: this.state.matchMinutes === 0 && this.state.matchSeconds < 20 ? 'Match 2nd half' : 'Match 1st half',
             setMinutes: this.getSetMinutes(this.state.matchMinutes,this.state.matchSeconds),
             setSeconds: this.getSetSeconds(this.state.matchMinutes,this.state.matchSeconds),
+            matchMinutes: this.state.matchMinutes === 0 && this.state.matchSeconds < 20 ? this.props.matchTime : this.state.matchMinutes,
+            matchSeconds: this.state.matchMinutes === 0 && this.state.matchSeconds < 20 ? 0 : this.state.matchSeconds,
         });
     }
 
