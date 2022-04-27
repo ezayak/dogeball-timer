@@ -6,12 +6,14 @@ import { currentDate, timeStampToTimeString, timeStampToDate, stringToTimeStamp 
 import { DateInput } from "../components/form/DateInput";
 import { MatchInfo } from "../components/MatchInfo";
 import { Match } from "../components/Match";
+import { Settings } from "../components/Settings";
 
 const Main = () => {
     const [matches, setMatches] = useState([]);
     const [loading, setLoading] = useState(false);
     const [date, setDate] = useState(currentDate());
-    const [MatchInfoVisibility, setMatchInfoVisibility] = useState(false);
+    const [matchInfoVisibility, setMatchInfoVisibility] = useState(false);
+    const [matchTime, setMatchTime] = useState(10);
     const [matchInfo, setMatchInfo] = useState({
         id: '',
         court: '', 
@@ -19,9 +21,16 @@ const Main = () => {
         time: '', 
         team1: '', 
         team2: '', 
-        referee: ''                        
+        referee: '',
+        matchTime: matchTime                        
     });
     const [mode, setMode] = useState('list');
+    const [settingsVisibility, setSettingsVisibility] = useState(false);
+    const [settings, setSettings] = useState({
+        showCourt: false,
+        showReferee: false,
+        profile: 'referee'
+    });
 
     const loadMatches = (newDate) => {
         const q = query(collection(db, 'matches'), where('date', '==', new Timestamp(stringToTimeStamp(newDate), 0))); //, where('date', '==', new Timestamp(stringToTimeStamp(newDate), 0))
@@ -31,8 +40,7 @@ const Main = () => {
                 const data = doc.data();
 
                 return {
-                    ...
-                    data,
+                    ...data,
                     time: timeStampToTimeString(data.time),
                     date: timeStampToDate(data.date)
                 };
@@ -45,8 +53,12 @@ const Main = () => {
     };
 
     const handleMatchInfoVisibility = () => {
-        setMatchInfoVisibility(!MatchInfoVisibility);
+        setMatchInfoVisibility(!matchInfoVisibility);
     };
+
+    const handleSettingsVisibility = () => {
+        setSettingsVisibility(!settingsVisibility);
+    }
 
     const addMatch = async (record) => {
         let id = '';
@@ -81,7 +93,10 @@ const Main = () => {
                 return element.id === id;
             });
 
-            setMatchInfo({...element});
+            setMatchInfo({
+                ...element,
+                matchTime: matchTime
+            });
         } else {
             setMatchInfo({
                 id: '',
@@ -90,7 +105,8 @@ const Main = () => {
                 time: '', 
                 team1: '', 
                 team2: '', 
-                referee: ''                        
+                referee: '',
+                matchTime: matchTime                        
             });
         }
 
@@ -106,20 +122,32 @@ const Main = () => {
         const element = matches.find((element) => {
             return element.id === id;
         });
-        setMatchInfo({...element});
+        setMatchInfo({
+            ...element,
+            matchTime: matchTime
+        });
     }
 
-    const stopMatch = () => {
+    const backToList = () => {
         setMode('list');
     }
 
-    const addScore = () => {
-        
+    const modifyMatch = (record) => {
+        setDoc(doc(db, "matches", record.id), {
+            ...record
+        }, {merge: true});        
     }
+
+    const handleSubmitSettings = (settings) => {
+        setMatchTime(settings.matchTime);
+        setSettings(settings);
+        setSettingsVisibility(!settingsVisibility);
+    };
 
     useEffect(function reloadMatches() {
         setLoading(false);
-        const unsubscribe = loadMatches(date);
+        loadMatches(date);
+        //const unsubscribe = loadMatches(date);
 
         //return {unsubscribe();};
     },[date]);
@@ -129,16 +157,24 @@ const Main = () => {
             {
                 mode === 'list' ? 
                     <>
-                        <div style={{"display":"grid"}}>
-                            <DateInput label="Date" value={date} onChange={onDateChange}/>
-                            <button className="waves-effect waves-teal btn-flat" onClick={() => {editMatch('')}}>Add match</button>
+                        <div style={{"display":"inline-flex", "alignItems": "center"}}>
+                            <div style={{"width":"30vh"}}><DateInput label="Date" value={date} onChange={onDateChange}/></div>
+                            <button className="waves-effect waves-teal btn-flat"  onClick={handleSettingsVisibility}><i className="material-icons">settings</i></button>
+                            {
+                            settings.profile === "admin" ?
+                                <button className="waves-effect waves-teal btn-flat" onClick={() => {editMatch('')}}><i className="material-icons">add</i></button>
+                            :
+                                <></>
+                            }
                         </div>
-                        <Matches info={matches} loading={loading} editMatch={editMatch} deleteMatch={deleteMatch} startMatch={startMatch}/>
+                        <Matches info={matches} loading={loading} editMatch={editMatch} deleteMatch={deleteMatch} startMatch={startMatch} {...settings}/>
             
-                        {MatchInfoVisibility && <MatchInfo changeVisibility={handleMatchInfoVisibility} addMatch={addMatch} {...matchInfo}/>}
+                        {matchInfoVisibility && <MatchInfo changeVisibility={handleMatchInfoVisibility} addMatch={addMatch} {...matchInfo}/>}
+                        {settingsVisibility && <Settings  changeVisibility={handleSettingsVisibility} onSubmit={handleSubmitSettings}  {...settings} matchTime={matchTime}/>}
+
                     </>
                 :
-                <Match stopMatch={stopMatch} addScore={addScore} {...matchInfo}/>
+                <Match backToList={backToList} modifyMatch={modifyMatch} {...matchInfo}/>
             }
             
         </div>

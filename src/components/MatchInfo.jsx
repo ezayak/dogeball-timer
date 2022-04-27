@@ -1,5 +1,4 @@
 import React from "react";
-import { currentDate } from '../utils/dateTimeFormat';
 
 class MatchInfo extends React.Component {
     constructor (props) {
@@ -70,8 +69,10 @@ class MatchInfo extends React.Component {
                             </div>
                         </div>
                     </li>
+                    <li className="collection-item">
+                        <button className="waves-effect waves-teal btn-flat" style={{"display":"block", "width": "100%"}} onClick={this.handleAddButton}>Save</button>
+                    </li>
                 </ul>
-                <button className="waves-effect waves-teal btn-flat" style={{"display":"block", "width": "100%"}} onClick={this.handleAddButton}>Save</button>
             </div>
         );
     }

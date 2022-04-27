@@ -25,10 +25,10 @@ code {
   background-color: white;
   width: 50rem;
   max-width: 95%;
-  -webkit-box-shadow: 10px 10px 5px 0px rgb(0 0 0 / 75%);
+  /* -webkit-box-shadow: 10px 10px 5px 0px rgb(0 0 0 / 75%); */
   z-index: 100;
   margin: 0 0 0 0;
-  border: 0 solid;  
+  /* border: 0 solid;   */
 }
 
 .icon-button {
@@ -44,4 +44,28 @@ code {
 .score {
   border: solid black 1px;
   border-radius: 5px;  
+}
+
+.score-text {
+  padding-right: 0.5rem;
+  font-weight: 800;
+  font-family: monospace;  
+}
+
+.score-text-complete {
+  color: #e7075a;
+}
+
+.settings {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 50rem;
+  max-width: 95%;
+  /* -webkit-box-shadow: 10px 10px 5px 0px rgb(0 0 0 / 75%); */
+  z-index: 100;
+  margin: 0 0 0 0;
+  /* border: 0 solid;   */
 }

@@ -2,13 +2,15 @@ import React from "react";
 import { Timer } from "./Timer";
 import { Score } from "./Score";
 
+const setMinutesDefault = 3;
+
 class Match extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            stopMatch: props.stopMatch,
-            addScore: props.addScore,
+            backToList: props.backToList,
+            modifyMatch: props.modifyMatch,
             team1: props.team1,
             team2: props.team2,
             score1: props.score1,
@@ -18,7 +20,15 @@ class Match extends React.Component {
             setNumber: 1,
             matchHalf: 1,
             titelSet: 'Set #1',
-            titleMatchHalf: 'Match 1st half'
+            titleMatchHalf: 'Match 1st half',
+            setTimerOn: false,
+            matchTimerOn: false,
+            setMinutes: this.getSetMinutes(props.matchTime, 0),
+            setSeconds: 0,
+            matchMinutes: props.matchTime,
+            matchSeconds: 0,
+            matchIsOn: false,
+            matchIsPaused: true
         };
     }
 
@@ -30,23 +40,97 @@ class Match extends React.Component {
         }
     }
 
+    onChangeTimerStatusSet = (status, id, minutes, seconds) => {
+        this.setState({
+            setTimerOn: status,
+            setMinutes: minutes,
+            setSeconds: seconds
+        });
+    }
+
+    onChangeTimerStatusMatch = (status, id, minutes, seconds) => {
+        this.setState({
+            matchTimerOn: status,
+            matchMinutes: minutes,
+            matchSeconds: seconds
+        });
+    }
+
+    getSetMinutes = (minutes, seconds) => {
+        return minutes <= 1 && seconds >= 20 ? 1 : Math.min(minutes, setMinutesDefault);
+    }
+
+    getSetSeconds = (minutes, seconds) => {
+        return minutes < 1 && seconds > 20 ? 30 : 
+                minutes < setMinutesDefault ? seconds : 0;
+    }
+
     handleAddScore = () => {
-        this.state.addScore(this.state.score1, this.state.score2);
+        this.state.modifyMatch({
+            score1: this.state.score1 + this.state.setScore1,
+            score2: this.state.score2 + this.state.setScore2,
+            id: this.props.id
+        });
         const setNumber = this.state.setNumber + 1;
         this.setState({
-            setNumber: this.setNumber + 1, 
             score1: this.state.score1 + this.state.setScore1, 
             score2: this.state.score2 + this.state.setScore2,
             setScore1: 0,
             setScore2: 0,
             setNumber: setNumber,
             titelSet: 'Set #'+ setNumber,
+            titleMatchHalf: this.matchMinutes === 0 && this.matchSeconds < 20 ? 'Match 2nd half' : 'Match 1st half',
+            setMinutes: this.getSetMinutes(this.state.matchMinutes,this.state.matchSeconds),
+            setSeconds: this.getSetSeconds(this.state.matchMinutes,this.state.matchSeconds),
         });
     }
 
+    startMatch = () => {
+        this.state.modifyMatch({
+            id: this.props.id,
+            status: 'online'
+        });
+        this.setState({
+            setTimerOn: true,
+            matchTimerOn: true,
+            matchIsOn: true,
+            matchIsPaused: false
+        });
+    };
+
+    stopMatch = () => {
+        this.state.modifyMatch({
+            id: this.props.id,
+            status: 'paused',
+            matchIsPaused: true
+        });
+        this.setState({
+            setTimerOn: false,
+            matchTimerOn: false,
+            matchIsPaused: true
+        });
+    }
+
+    endMatch = () => {
+        this.state.modifyMatch({
+            id: this.props.id,
+            status: 'complete',
+            matchIsPaused: true,
+            matchIsOn: false
+        });
+        this.state.backToList();
+    }
+
+    backToList = () => {
+        this.state.backToList();
+    }
+
     render() {
-        const {stopMatch, team1, team2, score1, score2, titelSet, titleMatchHalf, setScore1, setScore2} = this.state;
-        console.log(this.state);
+        const {team1, team2, score1, score2, titelSet, 
+            titleMatchHalf, setScore1, setScore2, setTimerOn, 
+            matchTimerOn, setMinutes, setSeconds, matchMinutes, matchSeconds,
+            matchIsPaused, matchIsOn} = this.state;
+        const variableFalse = false;
 
         return (
             <>
@@ -57,20 +141,21 @@ class Match extends React.Component {
                 </div>
                 <div className="row yellow lighten-5">
                     <div className="col s5 center-align"><h5>{score1}</h5></div>
-                    <div className="col s2 center-align"><h5></h5></div>
+                    <div className="col s2 center-align"></div>
                     <div className="col s5 center-align"><h5>{score2}</h5></div>
                 </div>
                 <div className="center-align">
-                    <a className="waves-effect waves-light-blue btn-flat btn-large" onClick={stopMatch}>Stop <i className="material-icons left">stop</i></a>
-                    <a className="waves-effect waves-light-blue btn-flat btn-large" onClick={stopMatch}>Start <i className="material-icons left">play_arrow</i></a>
-                    <a className="waves-effect waves-light-blue btn-flat btn-large" onClick={stopMatch}>Pause <i className="material-icons left">pause</i> </a>
+                    {matchIsPaused && <a href="#!" className="waves-effect waves-light-blue btn-flat btn-large" onClick={this.startMatch}>Start <i className="material-icons left">play_arrow</i></a>}
+                    {!matchIsPaused && <a href="#!" className="waves-effect waves-light-blue btn-flat btn-large" onClick={this.stopMatch}>Pause <i className="material-icons left">pause</i> </a>}                    
+                    {!matchIsOn && <a href="#!" className="waves-effect waves-light-blue btn-flat btn-large" onClick={this.backToList}>Back <i className="material-icons left">arrow_back</i></a>}
+                    {matchIsOn && <a href="#!" className="waves-effect waves-light-blue btn-flat btn-large" onClick={this.endMatch}>End match <i className="material-icons left">stop</i></a>}
                 </div>
                 <div className="row">
                     <div className="col s6 center-align">
-                        <Timer minutes="10" seconds="0" title={titleMatchHalf} timerIsOn={false}/>
+                        <Timer minutes={matchMinutes} seconds={matchSeconds} title={titleMatchHalf} timerIsOn={matchTimerOn} onChangeStatus={this.onChangeTimerStatusMatch} id="match" showStartButton={variableFalse}/>
                     </div>
                     <div className="col s6 center-align">
-                        <Timer minutes="3" seconds="0" title={titelSet} timerIsOn={false}/>
+                        <Timer minutes={setMinutes} seconds={setSeconds} title={titelSet} timerIsOn={setTimerOn} onChangeStatus={this.onChangeTimerStatusSet} id="set" showStartButton={!matchIsPaused}/>
                     </div>
                 </div>
                 <div className="row">
