@@ -1,15 +1,15 @@
 {
-  "main.css": "/static/css/main.0a66ef22.chunk.css",
-  "main.js": "/static/js/main.e338da6f.chunk.js",
-  "main.js.map": "/static/js/main.e338da6f.chunk.js.map",
-  "static/js/1.e7e0e04a.chunk.js": "/static/js/1.e7e0e04a.chunk.js",
-  "static/js/1.e7e0e04a.chunk.js.map": "/static/js/1.e7e0e04a.chunk.js.map",
-  "static/js/2.3d4e1d80.chunk.js": "/static/js/2.3d4e1d80.chunk.js",
-  "static/js/2.3d4e1d80.chunk.js.map": "/static/js/2.3d4e1d80.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.6a4751f8.js",
-  "runtime~main.js.map": "/static/js/runtime~main.6a4751f8.js.map",
-  "static/css/main.0a66ef22.chunk.css.map": "/static/css/main.0a66ef22.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.e6a91b1ceeb657aa975fbcad888cc06a.js": "/precache-manifest.e6a91b1ceeb657aa975fbcad888cc06a.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/dogeball-timer/static/css/main.0a66ef22.chunk.css",
+  "main.js": "/dogeball-timer/static/js/main.e338da6f.chunk.js",
+  "main.js.map": "/dogeball-timer/static/js/main.e338da6f.chunk.js.map",
+  "static/js/1.e7e0e04a.chunk.js": "/dogeball-timer/static/js/1.e7e0e04a.chunk.js",
+  "static/js/1.e7e0e04a.chunk.js.map": "/dogeball-timer/static/js/1.e7e0e04a.chunk.js.map",
+  "static/js/2.37131c4f.chunk.js": "/dogeball-timer/static/js/2.37131c4f.chunk.js",
+  "static/js/2.37131c4f.chunk.js.map": "/dogeball-timer/static/js/2.37131c4f.chunk.js.map",
+  "runtime~main.js": "/dogeball-timer/static/js/runtime~main.3706ee5a.js",
+  "runtime~main.js.map": "/dogeball-timer/static/js/runtime~main.3706ee5a.js.map",
+  "static/css/main.0a66ef22.chunk.css.map": "/dogeball-timer/static/css/main.0a66ef22.chunk.css.map",
+  "index.html": "/dogeball-timer/index.html",
+  "precache-manifest.36a58727573e62a8368bf2ca92e53ea6.js": "/dogeball-timer/precache-manifest.36a58727573e62a8368bf2ca92e53ea6.js",
+  "service-worker.js": "/dogeball-timer/service-worker.js"
 }
