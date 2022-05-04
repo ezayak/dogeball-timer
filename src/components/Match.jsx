@@ -154,10 +154,25 @@ class Match extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col s6 center-align">
-                        <Timer minutes={matchMinutes} seconds={matchSeconds} title={titleMatchHalf} timerIsOn={matchTimerOn} onChangeStatus={this.onChangeTimerStatusMatch} id="match" showStartButton={variableFalse}/>
+                        <Timer 
+                            minutes={matchMinutes} 
+                            seconds={matchSeconds} 
+                            title={titleMatchHalf} 
+                            timerIsOn={matchTimerOn} 
+                            onChangeStatus={this.onChangeTimerStatusMatch} 
+                            id="match" showStartButton={variableFalse}
+                        />
                     </div>
                     <div className="col s6 center-align">
-                        <Timer minutes={setMinutes} seconds={setSeconds} title={titelSet} timerIsOn={setTimerOn} onChangeStatus={this.onChangeTimerStatusSet} id="set" showStartButton={!matchIsPaused}/>
+                        <Timer 
+                            minutes={setMinutes} 
+                            seconds={setSeconds} 
+                            title={titelSet} 
+                            timerIsOn={setTimerOn} 
+                            onChangeStatus={this.onChangeTimerStatusSet} 
+                            id="set" 
+                            showStartButton={!matchIsPaused}
+                        />
                     </div>
                 </div>
                 <div className="row">
