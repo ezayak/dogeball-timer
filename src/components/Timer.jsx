@@ -5,6 +5,8 @@ class Timer extends React.Component {
         super(props);
 
         this.state = {
+            initialMinutes: +props.minutes,
+            initialSeconds: +props.seconds,
             minutes: +props.minutes,
             seconds: +props.seconds,
             minutesStr: this.formatTime(+props.minutes),
@@ -21,7 +23,7 @@ class Timer extends React.Component {
     }
 
     stopTimer = () => {
-         clearInterval(this.timerId);
+        clearInterval(this.timerId);
         this.setState({
             timerIsOn: false
         });
@@ -62,15 +64,23 @@ class Timer extends React.Component {
         }, 1000);
     }
 
+    resetTimerInitial = () => {
+        this.setState({
+           seconds : this.state.initialSeconds,
+           minutes: this.state.initialMinutes,
+           minutesStr: this.formatTime(this.state.initialMinutes),
+           secondsStr: this.formatTime(this.state.initialSeconds)
+        });
+    }
+
     resetTimer = () => {
         this.setState({
-           seconds : +this.props.seconds,
+           seconds :+this.props.seconds,
            minutes: +this.props.minutes,
            minutesStr: this.formatTime(+this.props.minutes),
            secondsStr: this.formatTime(+this.props.seconds)
         });
-    }
-
+    }    
     componentDidUpdate(prevProps) {
         if (prevProps.title !== this.props.title) {
             this.setState({title : this.props.title});
@@ -118,7 +128,7 @@ class Timer extends React.Component {
                             </div>
                     }
                     <div className="col s6">
-                        <a href="#!" className="waves-effect waves-light-blue btn-flat" onClick={this.resetTimer}>Reset</a>
+                        <a href="#!" className="waves-effect waves-light-blue btn-flat" onClick={this.resetTimerInitial}>Reset</a>
                     </div>
                 </div>
             </div>
