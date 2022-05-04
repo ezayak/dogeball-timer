@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/dogeball-timer/precache-manifest.3c6965a297a61d3b58ce42a1f5a7d53f.js"
+  "/dogeball-timer/precache-manifest.26916ff58aa6c39367fd05debb2a722d.js"
 );
 
 workbox.clientsClaim();
